@@ -46,9 +46,13 @@
         const div = document.createElement('div');
         const p = document.createElement('p');
         const span = document.createElement('span');
+        const h5 = document.createElement('h5');
         
+
+        myName
         p.textContent = jsonData.message;
         span.textContent = jsonData.time;
+        h5.textContent = jsonData.nickname;
 
         console.log('sdfsdfdsf  ' + jsonData.nickname);
         if (jsonData.nickname === myName) {
@@ -58,11 +62,11 @@
             chat.appendChild(div);
         }else{
             div.appendChild(p)
+            div.appendChild(h5)
             div.appendChild(span)
             chat.appendChild(div);
         }
-
-
+        chat.scrollTop = chat.scrollHeight;
     }
 
     function hi(jsonData) {

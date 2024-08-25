@@ -3,6 +3,7 @@
 }
 
 main{
+    position:relative;
     display: flex;
     justify-content: center;
     background-color: #222;
@@ -43,22 +44,33 @@ main{
 }
 
 #chat-log{
-    padding: 20px;
-    height: 100%;
+padding: 20px 10px;
+height: calc(100% - 40px);
+overflow-y: auto;
+box-sizing: border-box;
 }
 
 #chat-log > div {
-    padding: 6px 0;
+    position:relative;
+    padding: 17px 0 0px 0;
 }
 
 #chat-log p{
     background: beige;
     display: inline-block;
-    padding: 10px 30px;
+    padding: 10px 25px;
     margin: 0;
     border-radius: 20px;
     text-align: left;
     font-size: 14px;
+}
+
+#chat-log h5{
+    position: absolute;
+    top: -12px;
+    left: 2px;
+    font-size: 10px;
+    color: #111;
 }
 
 #chat-log span{
@@ -96,7 +108,7 @@ main{
 
 #nickname-popup{
     position: absolute;
-    top: calc(50vh - 40vw);
+    top: calc(50vh - 100px);
     left: 50%;
     transform: translateX(-50%);
     width: 80vw;
