@@ -18,6 +18,8 @@
   "homepage": "https://github.com/cheesepizza453/chat-app-2408#readme",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4",
+    "ws": "^8.18.0"
   }
 }
