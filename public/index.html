@@ -3,10 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Websocket Chatting</title>
+    <title>웹소켓 테스트</title>
 
     <script>
-    const ws = new WebSocket("ws://localhost:8001");
+
+    let HOST = location.origin.replace(/^http/, 'ws')
+    let ws = new WebSocket(HOST);
+    let el;
 
     function clearMessage() {
     document.getElementById("message").value = "";
@@ -16,23 +19,52 @@
     function sendMessage() {
     const nickname = document.getElementById("nickname").value;
     const message = document.getElementById("message").value;
-    const fullMessage = `${nickname}: ${message}`;
+    const fullMessage = { nickname, message, requestTime: true };
 
-    ws.send(fullMessage);
+    ws.send(JSON.stringify(fullMessage));
     clearMessage();
     }
 
-    // 메세지 수신
-    function receiveMessage(event) {
-    const chat = document.createElement("div");
-    const message = document.createTextNode(event.data);
-    chat.appendChild(message);
+    function write(jsonData,isTrue) {
+        const chat = document.getElementById('chat-log');
+        const p = document.createElement('p');
+        const massage = `${jsonData.nickname} : ${jsonData.message} ${jsonData.time}`;
 
-    const chatLog = document.getElementById("chat-log");
-    chatLog.appendChild(chat);
+        p.textContent = massage;
+        chat.appendChild(p);
     }
 
+    // console.log('클라이언트에서받음' + event.data)
+
+    function receiveMessage(event) {
+            let data;
+            if (event.data instanceof Blob) {
+                const reader = new FileReader();
+                
+                reader.onload = function() {
+                    try {
+                        data = JSON.parse(reader.result);
+                    } catch (error) {
+                        console.error("JSON 파싱 오류:", error);
+                    }
+                };
+                
+                reader.readAsText(event.data);
+            } else {
+                try {
+                    data = JSON.parse(event.data);
+                } catch (error) {
+                    console.error("JSON 파싱 오류:", error);
+                }
+            }
+
+            if(data.nickname && data.message){
+                write(data);
+            }
+        }
+
     ws.onmessage = receiveMessage;
+    
     </script>
   </head>
   <body>
