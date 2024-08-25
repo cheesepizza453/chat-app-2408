@@ -2,13 +2,20 @@ const express = require("express");
 const { Server } = require("ws");
 const PORT = process.env.PORT || 3000;
 const INDEX = "/public/index.html";
+const path = require('path');
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT})`));
+
+const app = express(); // Express 애플리케이션 인스턴스 생성
+
+// 정적 파일 제공 설정
+app.use(express.static(path.join(__dirname, 'public')));
+
+const server = app.listen(PORT, () => {
+    console.log(`Listening on ${PORT}`);
+});
+
 
 const wss = new Server({ server });
-
 wss.broadcast = (message) => {
   wss.clients.forEach((client) => {
     client.send(message);
@@ -25,7 +32,14 @@ wss.on('connection', (ws) => {
         try {
             const msg = JSON.parse(message);
             // 메시지에 시간 요청이 포함된 경우 현재 시간을 추가
-            if (msg.requestTime) {
+            console.log(msg.join)
+            if (msg.join) {
+              const joinMessage = JSON.stringify({
+                  message: `${msg.nickname}님이 입장하셨습니다.`,
+                  join: true
+              });
+              wss.broadcast(joinMessage); // 입장 메시지를 브로드캐스트
+            } else if (msg.requestTime) {
               const timeMessage = JSON.stringify({
                 nickname: msg.nickname || '',
                 message: msg.message || '',
@@ -33,7 +47,6 @@ wss.on('connection', (ws) => {
               });
               wss.broadcast(timeMessage); // 현재 시간을 포함한 메시지를 클라이언트에 전송
             } else {
-              // 요청이 없는 일반 메시지 브로드캐스트
               wss.broadcast(message);
             }
           } catch (error) {
@@ -58,6 +71,5 @@ function getCurrentTime() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
+    return `${hours}:${minutes}`;
 }

@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>웹소켓 테스트</title>
+    <link rel="stylesheet" href="./styles/main.css"/>
 
     <script>
-
     let HOST = location.origin.replace(/^http/, 'ws')
     let ws = new WebSocket(HOST);
     let el;
+    let myName = '';
 
     function clearMessage() {
     document.getElementById("message").value = "";
@@ -25,17 +26,55 @@
     clearMessage();
     }
 
+    function createID() {
+    const nickname = document.getElementById("nickname").value;
+    const dimmed = document.getElementById("dimmed");
+    const popup = document.getElementById("nickname-popup");
+    const nicknameAlert = document.getElementById("nickname-alert");
+
+    if(!nickname){
+        nicknameAlert.textContent = '이름을 입력해주세욥!!!!!'
+    }else{
+        ws.send(JSON.stringify({ nickname: nickname, join: true }));
+        dimmed.style.display = 'none';
+        popup.style.display = 'none';
+        myName = nickname;
+    }}
+
     function write(jsonData,isTrue) {
         const chat = document.getElementById('chat-log');
+        const div = document.createElement('div');
         const p = document.createElement('p');
-        const massage = `${jsonData.nickname} : ${jsonData.message} ${jsonData.time}`;
+        const span = document.createElement('span');
+        
+        p.textContent = jsonData.message;
+        span.textContent = jsonData.time;
 
-        p.textContent = massage;
-        chat.appendChild(p);
+        console.log('sdfsdfdsf  ' + jsonData.nickname);
+        if (jsonData.nickname === myName) {
+            div.className += 'my-bubble';
+            div.appendChild(span)
+            div.appendChild(p)
+            chat.appendChild(div);
+        }else{
+            div.appendChild(p)
+            div.appendChild(span)
+            chat.appendChild(div);
+        }
+
+
     }
 
-    // console.log('클라이언트에서받음' + event.data)
+    function hi(jsonData) {
+        const chat = document.getElementById('chat-log');
+        const span = document.createElement('span')
 
+        span.className += 'alert'
+        span.textContent = jsonData.message;
+        chat.appendChild(span)
+    }
+
+    // 받을때마다
     function receiveMessage(event) {
             let data;
             if (event.data instanceof Blob) {
@@ -58,7 +97,11 @@
                 }
             }
 
-            if(data.nickname && data.message){
+            if(data.join){
+                hi(data);
+            }
+
+            if(data.nickname && data.message ){
                 write(data);
             }
         }
@@ -68,23 +111,26 @@
     </script>
   </head>
   <body>
-    <h1>채팅테스트</h1>
-    <div>
-      <input
-        type="text"
-        id="nickname"
-        placeholder="닉네임"
-        style="width: 50px"
-      />
-      <input
-        type="text"
-        id="message"
-        placeholder="메세지"
-        style="width: 200px"
-      />
-      <button onClick="sendMessage()">전송</button>
-    </div>
-
-    <div id="chat-log"></div>
+    <main>
+        <div class="chat-container">
+            <div id="chat-log"></div>
+            <div class="massage-input">
+                <input
+                type="text"
+                id="message"
+              />
+              <button type="submit" onClick="sendMessage()">Enter</button>
+            </div>
+        </div>
+        <div id="nickname-popup">
+            <p id="nickname-alert">이름을 입력해주세욥</p>
+            <input
+            type="text"
+            id="nickname"
+            />
+            <button type="submit" onclick="createID()">확인</button>
+        </div>
+    </main>
+    <div id="dimmed"></div>
   </body>
 </html>

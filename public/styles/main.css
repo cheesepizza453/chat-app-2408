@@ -1,0 +1,153 @@
+*{
+    box-sizing: border-box;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    background-color: #222;
+}
+
+.chat-container{
+    position: relative;
+    width: 400px;
+    height: 95vh;
+    background-color: #ddd;
+}
+
+.massage-input{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    width: 100%;
+    height: 40px;
+    background-color: #eee;
+    display: flex;
+}
+
+.massage-input input{
+    width: 80%;
+    height: 40px;
+    border: none;
+}
+
+.massage-input button{
+    width: 20%;
+    height: 40px;
+    border: none;
+    background-color: #4baad1;
+    color: #fff;
+    font-size: 14px;
+}
+
+#chat-log{
+    padding: 20px;
+    height: 100%;
+}
+
+#chat-log > div {
+    padding: 6px 0;
+}
+
+#chat-log p{
+    background: beige;
+    display: inline-block;
+    padding: 10px 30px;
+    margin: 0;
+    border-radius: 20px;
+    text-align: left;
+    font-size: 14px;
+}
+
+#chat-log span{
+    font-size: 10px;
+    padding: 0 6px;
+    color: #555;
+}
+
+#chat-log span.alert{
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+}
+
+#chat-log .my-bubble {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+#chat-log .my-bubble p{
+    background-color: #b8c1f3;
+}
+
+#dimmed{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: 0.7;
+}
+
+#nickname-popup{
+    position: absolute;
+    top: calc(50vh - 100px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height:200px;
+    z-index: 10;
+    background: #f0e9dc;
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+#nickname-popup p{
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+#nickname-popup span{
+    color: red;
+    text-align: center;
+    font-size: 12px;
+    height: 12px;
+}
+
+#nickname-popup input{
+    border: none;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#nickname-popup button{
+    border: none;
+    background-color: #333;
+    color: #fff;
+    width: 100%;
+    height: 55px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#nickname-popup button:hover{
+    background-color: #111;
+}
+
+#dimmed.off{
+    display: none;
+}
+
+#nickname-popup .off{
+    display: none;
+}
