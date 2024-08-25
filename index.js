@@ -4,11 +4,14 @@ const app = express()
 
 app.use(express.static("public"))
 
-app.listen(8000, () => {
-  console.log(`Example app listening on port 8000`)
+const HTTP_PORT = process.env.PORT || 8000;
+const WS_PORT = process.env.PORT || 8001;
+
+app.listen(HTTP_PORT, () => {
+  console.log(`port : ${HTTP_PORT}`)
 })
 
-const wss = new WebSocketServer({ port: 8001 })
+const wss = new WebSocketServer({ port: WS_PORT })
 
 wss.broadcast = (message) => {
     wss.clients.forEach((client) => {
